@@ -1,0 +1,1167 @@
+{
+	"info": {
+		"_postman_id": "a61075ac-799c-428e-b4e4-32263a77a4c3",
+		"name": "Collección Parcial",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "City",
+			"item": [
+				{
+					"name": "Create City",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json()\r",
+									"pm.globals.set(\"city_id\", data.id);\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"   pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Buenos Aires\",\r\n    \"country\": \"Argentina\",\r\n    \"numHabitants\": \"1000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/cities/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cities",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create City error case",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 412\", function () {\r",
+									"   pm.response.to.have.status(412);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Get expected error message\", function () {\r",
+									"   var data = pm.response.json();\r",
+									"   pm.expect(data.message).to.eql(\"El pais que ingresó no es válido\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Buenos Aires\",\r\n    \"country\": \"Colombia\",\r\n    \"numHabitants\": \"1000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/cities/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cities",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all cities",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Number of cities > ' + 0, function () {\r",
+									"   var data = pm.response.json()\r",
+									"   pm.expect(data.length).to.greaterThan(0)\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"   pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/cities/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cities",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get City by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"   pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/cities/:cityId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cities",
+								":cityId"
+							],
+							"variable": [
+								{
+									"key": "cityId",
+									"value": "{{city_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get City by Id error case",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"   pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Get expected error message\", function () {\r",
+									"   var data = pm.response.json();\r",
+									"   pm.expect(data.message).to.eql(\"La ciudad con el id dado no fue encontrado\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/cities/:cityId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cities",
+								":cityId"
+							],
+							"variable": [
+								{
+									"key": "cityId",
+									"value": "fb77f90d-2878-42f3-b23a-316e36e35be8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update City",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"   pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"La plata\",\r\n    \"country\": \"Argentina\",\r\n    \"numHabitants\": \"1000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/cities/:cityId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cities",
+								":cityId"
+							],
+							"variable": [
+								{
+									"key": "cityId",
+									"value": "{{city_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update City error case",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 412\", function () {\r",
+									"   pm.response.to.have.status(412);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Get expected error message\", function () {\r",
+									"   var data = pm.response.json();\r",
+									"   pm.expect(data.message).to.eql(\"El pais que ingresó no es válido\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Buenos Aires\",\r\n    \"country\": \"Colombia\",\r\n    \"numHabitants\": \"1000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/cities/:cityId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cities",
+								":cityId"
+							],
+							"variable": [
+								{
+									"key": "cityId",
+									"value": "{{city_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete City error case",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"   pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Get expected error message\", function () {\r",
+									"   var data = pm.response.json();\r",
+									"   pm.expect(data.message).to.eql(\"La ciudad con el id dado no fue encontrado\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/cities/:cityId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cities",
+								":cityId"
+							],
+							"variable": [
+								{
+									"key": "cityId",
+									"value": "fb77f90d-2878-42f3-b23a-316e36e35be8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete City",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"   pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/cities/:cityId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cities",
+								":cityId"
+							],
+							"variable": [
+								{
+									"key": "cityId",
+									"value": "{{city_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Supermarket",
+			"item": [
+				{
+					"name": "Create Supermarket",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json()\r",
+									"pm.globals.set(\"market_id\", data.id);\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"   pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Supermercado Ara\",\r\n    \"long\": \"1.0000\",\r\n    \"lati\": \"10000\",\r\n    \"webPage\": \"http://google.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/supermarkets",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"supermarkets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Supermarket error case",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 412\", function () {\r",
+									"   pm.response.to.have.status(412);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Get expected error message\", function () {\r",
+									"   var data = pm.response.json();\r",
+									"   pm.expect(data.message).to.eql(\"El nombre dado no tiene más de 10 caracteres\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Ara\",\r\n    \"long\": \"1.0000\",\r\n    \"lati\": \"10000\",\r\n    \"webPage\": \"http://google.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/supermarkets",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"supermarkets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Supermarkets",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Number of supermarkets > ' + 0, function () {\r",
+									"   var data = pm.response.json()\r",
+									"   pm.expect(data.length).to.greaterThan(0)\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"   pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/supermarkets",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"supermarkets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Supermarkets by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"   pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/supermarkets/:superMarketId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"supermarkets",
+								":superMarketId"
+							],
+							"variable": [
+								{
+									"key": "superMarketId",
+									"value": "{{market_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Supermarkets by Id error case",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"   pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Get expected error message\", function () {\r",
+									"   var data = pm.response.json();\r",
+									"   pm.expect(data.message).to.eql(\"El Super Mercado con el id dado no fue encontrado\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/supermarkets/:superMarketId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"supermarkets",
+								":superMarketId"
+							],
+							"variable": [
+								{
+									"key": "superMarketId",
+									"value": "fb77f90d-2878-42f3-b23a-316e36e35be8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Supermarket",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"   pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Supermercado Olimpica\",\r\n    \"long\": \"1,0000\",\r\n    \"lati\": \"1,0000\",\r\n    \"webPage\": \"http://google.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/supermarkets/:superMarketId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"supermarkets",
+								":superMarketId"
+							],
+							"variable": [
+								{
+									"key": "superMarketId",
+									"value": "{{market_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Supermarket error case",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 412\", function () {\r",
+									"   pm.response.to.have.status(412);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Get expected error message\", function () {\r",
+									"   var data = pm.response.json();\r",
+									"   pm.expect(data.message).to.eql(\"El nombre dado no tiene más de 10 caracteres\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"D1\",\r\n    \"long\": \"1,0000\",\r\n    \"lati\": \"1,0000\",\r\n    \"webPage\": \"http://google.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/supermarkets/:superMarketId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"supermarkets",
+								":superMarketId"
+							],
+							"variable": [
+								{
+									"key": "superMarketId",
+									"value": "{{market_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Supermarket",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"   pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/supermarkets/:superMarketId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"supermarkets",
+								":superMarketId"
+							],
+							"variable": [
+								{
+									"key": "superMarketId",
+									"value": "{{market_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Supermarket error case",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"   pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Get expected error message\", function () {\r",
+									"   var data = pm.response.json();\r",
+									"   pm.expect(data.message).to.eql(\"El Super Mercado con el id dado no fue encontrado\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/supermarkets/:superMarketId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"supermarkets",
+								":superMarketId"
+							],
+							"variable": [
+								{
+									"key": "superMarketId",
+									"value": "fb77f90d-2878-42f3-b23a-316e36e35be8"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Supermarket-city",
+			"item": [
+				{
+					"name": "Add suppermarket from City",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"   pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/cities/:cityId/supermarkets/:supermarketId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cities",
+								":cityId",
+								"supermarkets",
+								":supermarketId"
+							],
+							"variable": [
+								{
+									"key": "cityId",
+									"value": "{{city_id}}"
+								},
+								{
+									"key": "supermarketId",
+									"value": "{{market_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add suppermarket from City error case",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"   pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Get expected error message\", function () {\r",
+									"   var data = pm.response.json();\r",
+									"   pm.expect(data.message).to.eql(\"El Super Mercado con el id dado no fue encontrado\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/cities/:cityId/supermarkets/:supermarketId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cities",
+								":cityId",
+								"supermarkets",
+								":supermarketId"
+							],
+							"variable": [
+								{
+									"key": "cityId",
+									"value": "{{city_id}}"
+								},
+								{
+									"key": "supermarketId",
+									"value": "fb77f90d-2878-42f3-b23a-316e36e35be8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get suppermarkets From City",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"   pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/cities/:cityId/supermarkets",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cities",
+								":cityId",
+								"supermarkets"
+							],
+							"variable": [
+								{
+									"key": "cityId",
+									"value": "{{city_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get suppermarket from City",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"   pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/cities/:cityId/supermarkets/:supermarketId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cities",
+								":cityId",
+								"supermarkets",
+								":supermarketId"
+							],
+							"variable": [
+								{
+									"key": "cityId",
+									"value": "{{city_id}}"
+								},
+								{
+									"key": "supermarketId",
+									"value": "{{market_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get suppermarket from City error case",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"   pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Get expected error message\", function () {\r",
+									"   var data = pm.response.json();\r",
+									"   pm.expect(data.message).to.eql(\"El Super Mercado con el id dado no fue encontrado\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/cities/:cityId/supermarkets/:supermarketId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cities",
+								":cityId",
+								"supermarkets",
+								":supermarketId"
+							],
+							"variable": [
+								{
+									"key": "cityId",
+									"value": "{{city_id}}"
+								},
+								{
+									"key": "supermarketId",
+									"value": "fb77f90d-2878-42f3-b23a-316e36e35be8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete suppermarket from City case error",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"   pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Get expected error message\", function () {\r",
+									"   var data = pm.response.json();\r",
+									"   pm.expect(data.message).to.eql(\"El Super Mercado con el id dado no fue encontrado\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/cities/:cityId/supermarkets/:supermarketId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cities",
+								":cityId",
+								"supermarkets",
+								":supermarketId"
+							],
+							"variable": [
+								{
+									"key": "cityId",
+									"value": "{{city_id}}"
+								},
+								{
+									"key": "supermarketId",
+									"value": "fb77f90d-2878-42f3-b23a-316e36e35be8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete suppermarket from City",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"   pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/cities/:cityId/supermarkets/:supermarketId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cities",
+								":cityId",
+								"supermarkets",
+								":supermarketId"
+							],
+							"variable": [
+								{
+									"key": "cityId",
+									"value": "{{city_id}}"
+								},
+								{
+									"key": "supermarketId",
+									"value": "{{market_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
