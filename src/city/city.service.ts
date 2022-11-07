@@ -37,7 +37,33 @@ export class CityService {
     return city;
   }
 
+  async findOneV2(id: string): Promise<CityEntity> {
+    const city: CityEntity = await this.cityRepository.findOne({
+      where: { id },
+      relations: ['markets']
+    });
+    if (!city) {
+      throw new BusinessLogicException(
+        this.notFoundMessage,
+        BusinessError.NOT_FOUND,
+      );
+    }
+    return city;
+  }
+
   async create(city: CityEntity): Promise<CityEntity> {
+    if (
+      !['argentina', 'ecuador', 'paraguay'].includes(city.country.toLowerCase())
+    ) {
+      throw new BusinessLogicException(
+        this.countryNotValidMessage,
+        BusinessError.PRECONDITION_FAILED,
+      );
+    }
+    return await this.cityRepository.save(city);
+  }
+
+  async createV2(city: CityEntity): Promise<CityEntity> {
     if (
       !['argentina', 'ecuador', 'paraguay'].includes(city.country.toLowerCase())
     ) {
